@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sse-noticeboard
+  labels:
+    app: sse-noticeboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sse-noticeboard
+  template:
+    metadata:
+      labels:
+        app: sse-noticeboard
+    spec:
+      containers:
+      - name: sse-noticeboard
+        image: sse-noticeboard:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        securityContext:
+          runAsNonRoot: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"

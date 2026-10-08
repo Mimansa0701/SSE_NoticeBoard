@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard-header">
+    <h1>Audit Logs</h1>
+    <div class="filters-card glass-card">
+        <form method="GET" action="{{ url_for('audit_logs') }}" class="filters-form" style="grid-template-columns: 1fr auto;">
+            <input type="text" name="search" placeholder="Search logs..." class="form-control search-input" value="{{ request.args.get('search', '') }}">
+            <button type="submit" class="btn-primary">Search</button>
+        </form>
+    </div>
+</div>
+
+<div class="glass-card table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Action</th>
+                <th>IP Address</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td class="whitespace-nowrap">{{ log.timestamp }}</td>
+                <td>{{ log.user_id or 'N/A' }}</td>
+                <td><span class="badge user-badge">{{ log.username }}</span></td>
+                <td><span class="badge action-badge">{{ log.action }}</span></td>
+                <td>{{ log.ip_address }}</td>
+                <td class="log-details">{{ log.details }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center py-4">No audit logs found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
